@@ -251,8 +251,8 @@ export const App = () => {
             onClick={e => {
               if (displayState !== '') {
                 displayOperator('-');
+                updateProcessState(1);
               }
-              updateProcessState(1);
             }}
           >-</Button>
         </Stack>

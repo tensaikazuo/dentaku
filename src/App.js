@@ -230,7 +230,7 @@ export const App = () => {
               if (displayState !== '' && displayState !== '0') {
                 displayValue('00');
               }
-              if (displayState !== '' && elementState !== '0') {
+              if (elementState !== '' && elementState !== '0') {
                 displayElement('00');
               }
             }}

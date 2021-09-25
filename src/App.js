@@ -27,33 +27,48 @@ export const App = () => {
   const [ operatorState, updateOperatorState ] = useState('');
   const [ processState, updateProcessState ] = useState(0);
   const [ elementState, updateElementState] = useState('');
+  const trimZero = val => {
+    if (val.indexOf('.') < 0 && val.substr(0, 1) === '0') {
+      return val.substr(2);
+    } else {
+      return val;
+    }
+  };
   const displayValue = val => {
     if (processState === 0) {
       if (displayState) {
-        updateDisplayState(displayState + val)
+        if (val !== '.') {
+          updateDisplayState(trimZero(displayState) + val);
+        } else {
+          updateDisplayState(displayState + val);
+        }
       } else {
-        updateDisplayState(val)
+        updateDisplayState(val);
       }
     }
   };
   const displayElement = val => {
     if (processState === 1) {
       if (elementState) {
-        updateElementState(elementState + val)
+        if (val !== '.') {
+          updateElementState(trimZero(elementState) + val);
+        } else {
+          updateElementState(elementState + val);
+        }
       } else {
-        updateElementState(val)
+        updateElementState(val);
       }
     }
   };
   const clearDisplay = () => {
-    updateDisplayState('')
-    updateProcessState(0)
-    updateOperatorState('')
-    updateElementState('')
+    updateDisplayState('');
+    updateProcessState(0);
+    updateOperatorState('');
+    updateElementState('');
   };
   const displayOperator = val => {
     if (!elementState) {
-      updateOperatorState(val)
+      updateOperatorState(val);
     }
   };
   const roundValue = val => {
@@ -62,25 +77,25 @@ export const App = () => {
   const processCalc = (val1, val2) => {
     switch (operatorState) {
       case '+':
-        updateDisplayState(parseFloat(val1) + parseFloat(val2));
+        updateDisplayState((parseFloat(val1) + parseFloat(val2)).toString());
         updateProcessState(0);
         updateOperatorState('');
         updateElementState('');
         break;
       case '-':
-        updateDisplayState(parseFloat(val1) - parseFloat(val2));
+        updateDisplayState((parseFloat(val1) - parseFloat(val2)).toString());
         updateProcessState(0);
         updateOperatorState('');
         updateElementState('');
         break;
       case 'x':
-        updateDisplayState(parseFloat(val1) * parseFloat(val2));
+        updateDisplayState((parseFloat(val1) * parseFloat(val2)).toString());
         updateProcessState(0);
         updateOperatorState('');
         updateElementState('');
         break;
       case '/':
-        updateDisplayState(roundValue(parseFloat(val1) / parseFloat(val2)));
+        updateDisplayState(roundValue(parseFloat(val1) / parseFloat(val2)).toString());
         updateProcessState(0);
         updateOperatorState('');
         updateElementState('');
@@ -102,29 +117,31 @@ export const App = () => {
             variant="outlined"
             size="large"
             onClick={e => {
-              displayValue('1')
-              displayElement('1')
+              displayValue('1');
+              displayElement('1');
             }}
           >1</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayValue('2')
-              displayElement('2')
+              displayValue('2');
+              displayElement('2');
             }}
           >2</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayValue('3')
-              displayElement('3')
+              displayValue('3');
+              displayElement('3');
             }}
           >3</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayOperator('+')
-              updateProcessState(1)
+              if (displayState !== '') {
+                displayOperator('+');
+                updateProcessState(1);
+              }
             }}
           >+</Button>
         </Stack>
@@ -133,29 +150,31 @@ export const App = () => {
             variant="outlined"
             size="large"
             onClick={e => {
-              displayValue('4')
-              displayElement('4')
+              displayValue('4');
+              displayElement('4');
             }}
           >4</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayValue('5')
-              displayElement('5')
+              displayValue('5');
+              displayElement('5');
             }}
           >5</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayValue('6')
-              displayElement('6')
+              displayValue('6');
+              displayElement('6');
             }}
           >6</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayOperator('x')
-              updateProcessState(1)
+              if (displayState !== '') {
+                displayOperator('x');
+                updateProcessState(1);
+              }
             }}
           >x</Button>
         </Stack>
@@ -164,29 +183,31 @@ export const App = () => {
             variant="outlined"
             size="large"
             onClick={e => {
-              displayValue('7')
-              displayElement('7')
+              displayValue('7');
+              displayElement('7');
             }}
           >7</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayValue('8')
-              displayElement('8')
+              displayValue('8');
+              displayElement('8');
             }}
           >8</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayValue('9')
-              displayElement('9')
+              displayValue('9');
+              displayElement('9');
             }}
           >9</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayOperator('/')
-              updateProcessState(1)
+              if (displayState !== '') {
+                displayOperator('/');
+                updateProcessState(1);
+              }
             }}
           >/</Button>
         </Stack>
@@ -195,22 +216,22 @@ export const App = () => {
             variant="outlined"
             size="large"
             onClick={e => {
-              if (displayState !== '') {
-                displayValue('0')
+              if (displayState !== '0') {
+                displayValue('0');
               }
-              if (elementState !== '') {
-                displayElement('0')
+              if (elementState !== '0') {
+                displayElement('0');
               }
             }}
           >0</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              if (displayState !== '') {
-                displayValue('00')
+              if (displayState !== '' && displayState !== '0') {
+                displayValue('00');
               }
-              if (elementState !== '') {
-                displayElement('00')
+              if (displayState !== '' && elementState !== '0') {
+                displayElement('00');
               }
             }}
           >00</Button>
@@ -218,18 +239,20 @@ export const App = () => {
             variant="outlined"
             onClick={e => {
               if (displayState !== '') {
-                displayValue('000')
+                displayValue('.');
               }
               if (elementState !== '') {
-                displayElement('000')
+                displayElement('.');
               }
             }}
-          >000</Button>
+          >.</Button>
           <Button
             variant="outlined"
             onClick={e => {
-              displayOperator('-')
-              updateProcessState(1)
+              if (displayState !== '') {
+                displayOperator('-');
+              }
+              updateProcessState(1);
             }}
           >-</Button>
         </Stack>
@@ -238,7 +261,9 @@ export const App = () => {
             variant="outlined"
             size="large"
             onClick={e => {
-              processCalc(displayState, elementState)
+              if (processState === 1 && elementState) {
+                processCalc(displayState, elementState);
+              }
             }}
           >=</Button>
         </Stack>
